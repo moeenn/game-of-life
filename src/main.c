@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -10,24 +11,19 @@ typedef struct {
   Color bg_norm;
   uint16_t grid_size;
   Color line_color;
+  Color fill_color;
 } GameConfig;
 
 #define MATRIX_SIZE 100
 
 typedef struct {
-  float grid[MATRIX_SIZE][MATRIX_SIZE];
+  bool grid[MATRIX_SIZE][MATRIX_SIZE];
 } GameState;
 
 typedef struct {
   Vector2 top_left;
   Vector2 bottom_right;
 } CellPosition;
-
-Color game_float_to_color(float color) {
-  unsigned char val = (unsigned char)255 * color;
-  struct Color c = {val, val, val, 255};
-  return c;
-}
 
 CellPosition game_get_cell_position(uint16_t win_size, uint16_t grid_size,
                                     uint16_t x, uint16_t y) {
@@ -51,9 +47,9 @@ CellPosition game_get_cell_position(uint16_t win_size, uint16_t grid_size,
   return p;
 }
 
-void game_fill_cell(Vector2 top_left, Vector2 bottom_right, float color) {
+void game_fill_cell(Vector2 top_left, Vector2 bottom_right, Color color) {
   DrawRectangle(top_left.x, top_left.y, top_left.x - bottom_right.x,
-                top_left.y - bottom_right.y, game_float_to_color(color));
+                top_left.y - bottom_right.y, color);
 }
 
 void game_draw_grid_lines(GameConfig *c) {
@@ -71,11 +67,11 @@ void game_draw_grid_lines(GameConfig *c) {
 void game_render_cells(GameConfig *c, GameState *s) {
   for (uint16_t y = 0; y < MATRIX_SIZE; y++) {
     for (uint16_t x = 0; x < MATRIX_SIZE; x++) {
-      float cell = s->grid[y][x];
-      if (cell != 0.0f) {
+      bool cell = s->grid[y][x];
+      if (cell) {
         CellPosition position =
             game_get_cell_position(c->win_width, c->grid_size, x, y);
-        game_fill_cell(position.top_left, position.bottom_right, cell);
+        game_fill_cell(position.top_left, position.bottom_right, c->fill_color);
       }
     }
   }
@@ -90,16 +86,12 @@ int main() {
       .bg_norm = BLACK,
       .grid_size = MATRIX_SIZE,
       .line_color = {30, 30, 30, 255},
+      .fill_color = {160, 160, 160, 255},
   };
 
-  // TODO: initialize with size and default value
   GameState state = {
-      .grid = {{0}},
+      .grid = {{false}},
   };
-
-  // TODO: remove after testing
-  state.grid[3][3] = 0.8;
-  state.grid[10][10] = 0.3;
 
   InitWindow(config.win_width, config.win_height, config.win_title);
   SetTargetFPS(config.fps);
