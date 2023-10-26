@@ -1,4 +1,4 @@
-PROJECT = sandbox
+PROJECT = game-of-life
 
 CC = clang
 SRC_DIR =./src
@@ -6,7 +6,7 @@ SRC = $(wildcard ${SRC_DIR}/*.c)
 OUT_DIR = bin
 OBJ = ${SRC:.c=.o}
 LIBS = -lm -lraylib
-CFLAGS = -std=c99 -pipe -Wno-unused -Wall -Wno-deprecated-declarations
+CFLAGS = -std=c99 -pipe -Wno-unused -Wall -Wno-deprecated-declarations -O3
 BINARY = ${OUT_DIR}/${PROJECT}
 
 main: ${OBJ}
