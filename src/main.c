@@ -7,12 +7,12 @@ int main() {
       .win_width = 900,
       .win_height = 900,
       .win_title = "Game",
-      .fps = 20,
+      .fps = 15,
       .bg_norm = BLACK,
       .grid_size = MATRIX_SIZE,
       .line_color = {30, 30, 30, 255},
       .fill_color = {160, 160, 160, 255},
-      .init_active = 500,
+      .init_active = 400,
   };
 
   GameState state = {

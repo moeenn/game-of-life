@@ -106,12 +106,17 @@ void game_initialize_random_cells(GameState *state, int count) {
  * neighbors
  * - If the cell is dead, then it springs to life only in the case that it has 3
  * live neighbors
+ * - If cell is alive but has 5 or more alive neighbors, it dies from congestion
  */
 void game_update_cell_status(GameState *state, uint16_t x, uint16_t y) {
   int n_neighbors = game_count_cell_neighbors(state, x, y);
-  if (state->grid[x][y] == true && (n_neighbors == 2 || n_neighbors == 3)) {
+  bool is_alive = state->grid[x][y];
+
+  if (is_alive == true && (n_neighbors == 2 || n_neighbors == 3)) {
     state->next[x][y] = true;
-  } else if (state->grid[x][y] == false && n_neighbors >= 3) {
+  } else if (is_alive == true && n_neighbors >= 5) {
+     state->next[x][y] = false;
+  } else if (is_alive == false && n_neighbors >= 3) {
     state->next[x][y] = true;
   } else {
     state->next[x][y] = false;
