@@ -1,5 +1,14 @@
 #include "game.h"
 
+/**
+ * not using raylibs GetRandomValue because it produces zero values on some 
+ * systems 
+ */
+int random_int(int min, int max) {
+  int v = rand();
+  return (v % max) + min;  
+}
+
 CellPosition game_get_cell_position(uint16_t win_size, uint16_t grid_size,
                                     uint16_t x, uint16_t y) {
   uint16_t cell_size = win_size / grid_size;
@@ -94,8 +103,8 @@ int game_count_cell_neighbors(GameState *state, uint16_t x, uint16_t y) {
 void game_initialize_random_cells(GameState *state, int count) {
   int i, x, y;
   for (i = 0; i < count; i++) {
-    x = GetRandomValue(0, MATRIX_SIZE);
-    y = GetRandomValue(0, MATRIX_SIZE);
+    x = random_int(0, MATRIX_SIZE);
+    y = random_int(0, MATRIX_SIZE);
     state->grid[x][y] = true;
   }
 }

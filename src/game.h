@@ -44,6 +44,7 @@ typedef struct {
  * function signatures
  *
  */
+int random_int(int min, int max);
 CellPosition game_get_cell_position(uint16_t win_size, uint16_t grid_size,
                                     uint16_t x, uint16_t y);
 void game_fill_cell(Vector2 top_left, Vector2 bottom_right, Color color);
